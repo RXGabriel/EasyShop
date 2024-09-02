@@ -1,0 +1,38 @@
+const express = require("express");
+const connectDB = require("./utils/db");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Servidor rodando na porta ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Erro ao conectar ao banco de dados:", error.message);
+  });
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Cache-Control",
+      "Expires",
+      "Pragma",
+    ],
+    credentials: true,
+  })
+);
+app.use(cookieParser());
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("API rodando");
+});
