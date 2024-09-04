@@ -1,35 +1,71 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Route, Routes } from "react-router-dom";
+import AuthLayout from "./components/auth/layout";
+import AuthRegister from "./pages/auth/register";
+import AdminLayout from "./components/admin-view/layout";
+import AdminDashboard from "./pages/admin-view/dashboard";
+import AdminProducts from "./pages/admin-view/products";
+import AdminOrders from "./pages/admin-view/orders";
+import AdminFeatures from "./pages/admin-view/featues";
+import ShoppingLayout from "./components/shopping-view/layout";
+import NotFound from "./pages/not-found";
+import ShoppingListing from "./pages/shopping-view/listing";
+import ShoppingCheckout from "./pages/shopping-view/checkout";
+import ShoppingAccount from "./pages/shopping-view/account";
+import ShoppingHome from "./pages/shopping-view/home";
+import AuthLogin from "./pages/auth/login";
+import CheckAuth from "./components/common/check-auth";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { Skeleton } from "./components/ui/skeleton";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { user, isAuthenticated, isLoading } = useSelector(
+    (state) => state.auth
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(CheckAuth());
+  }, [dispatch]);
+
+  if (isLoading) return <Skeleton className="w-[800] bg-black h-[600px]" />;
+  console.log(isLoading, user);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="flex flex-col overflow-hidden bg-white">
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CheckAuth
+              isAuthenticated={isAuthenticated}
+              user={user}
+            ></CheckAuth>
+          }
+        ></Route>
 
-export default App
+        <Route path="/auth" element={<AuthLayout />}>
+          <Route path="/login" element={<AuthLogin />} />
+          <Route path="/register" element={<AuthRegister />} />
+        </Route>
+
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="orders" element={<AdminOrders />} />
+          <Route path="features" element={<AdminFeatures />} />
+        </Route>
+
+        <Route path="/shop" element={<ShoppingLayout />}>
+          <Route path="home" element={<ShoppingHome />} />
+          <Route path="listing" element={<ShoppingListing />} />
+          <Route path="checkout" element={<ShoppingCheckout />} />
+          <Route path="account" element={<ShoppingAccount />} />
+        </Route>
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
+  );
+}
+export default App;
