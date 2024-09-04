@@ -17,6 +17,7 @@ import CheckAuth from "./components/common/check-auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { Skeleton } from "./components/ui/skeleton";
+import UnauthPage from "./pages/unauth-page";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -63,6 +64,7 @@ function App() {
           <Route path="account" element={<ShoppingAccount />} />
         </Route>
 
+        <Route path="/unauth-page" element={<UnauthPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
