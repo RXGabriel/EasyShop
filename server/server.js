@@ -33,7 +33,7 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
-app.use("api/auth", authRouter);
+app.use("/api/auth", authRouter);
 
 app.get("/", (req, res) => {
   res.send("API rodando");
