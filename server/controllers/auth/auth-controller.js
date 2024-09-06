@@ -75,7 +75,7 @@ const loginUser = async (req, res) => {
   }
 };
 
-const logoutUser = async (req, res) => {
+const logoutUser = (req, res) => {
   res.clearCookie("token").json({
     success: true,
     message: "Sessão encerrada com sucesso",
@@ -88,16 +88,15 @@ const authMiddleware = async (req, res, next) => {
     return res
       .status(401)
       .json({ success: false, message: "Usuário não autenticado" });
-};
 
-try {
-  const decoded = jwt.verify(token, "CLIENT_SECRET_KEY");
-  req.user = decoded;
-  next();
-} catch (error) {
-  res.status(401).json({
-    success: false,
-    message: "Usuário não autenticado",
-  });
-}
+  try {
+    const decoded = jwt.verify(token, "CLIENT_SECRET_KEY");
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res
+      .status(401)
+      .json({ success: false, message: "Usuário não autenticado" });
+  }
+};
 module.exports = { registerUser, loginUser, logoutUser, authMiddleware };
