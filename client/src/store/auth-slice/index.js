@@ -28,7 +28,7 @@ export const loginUser = createAsyncThunk("/auth/login", async (formData) => {
   return response.data;
 });
 
-const logoutUser = createAsyncThunk("/auth/logout", async () => {
+export const logoutUser = createAsyncThunk("/auth/logout", async () => {
   const response = await axios.post(
     "http://localhost:5000/api/auth/logout",
     {},
@@ -36,7 +36,8 @@ const logoutUser = createAsyncThunk("/auth/logout", async () => {
   );
   return response.data;
 });
-const checkAuth = createAsyncThunk("/auth/check-auth", async () => {
+
+export const checkAuth = createAsyncThunk("/auth/check-auth", async () => {
   const response = await axios.get(
     "http://localhost:5000/api/auth/check-auth",
     {
