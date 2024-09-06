@@ -32,7 +32,7 @@ const loginUser = async (req, res) => {
 
   try {
     const checkUser = await User.findOne({ email });
-    if (checkUser)
+    if (!checkUser)
       return res.json({
         success: false,
         message: "Usuário não existe! Crie uma conta",
