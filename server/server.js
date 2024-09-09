@@ -3,6 +3,7 @@ const connectDB = require("./utils/db");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const authRouter = require("./routes/auth/auth-routes");
+const adminProductsRouter = require("./routes/admin/product-routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -34,6 +35,7 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRouter);
+app.use("/api/admin/products", adminProductsRouter);
 
 app.get("/", (req, res) => {
   res.send("API rodando");
