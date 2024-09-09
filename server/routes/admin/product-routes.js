@@ -2,7 +2,7 @@ const express = require("express");
 const { upload } = require("../../utils/cloudinary");
 const {
   handleImageUpload,
-} = require("../../controllers/admin/products-controller");
+} = require("../../controllers/admin/product-controller");
 
 const router = express.Router();
 
