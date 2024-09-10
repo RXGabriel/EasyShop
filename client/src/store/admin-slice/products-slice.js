@@ -6,6 +6,18 @@ const initialState = {
   productList: [],
 };
 
+export const addNewProduct = createAsyncThunk(
+  "/products/addnewproduct",
+  async (formData) => {
+    const result = await axios.post(
+      "http://localhost:5000/api/admin/products/add",
+      formData,
+      { headers: { "Content-Type": "application/json" } }
+    );
+    return result?.data;
+  }
+);
+
 export const fetchAllProducts = createAsyncThunk(
   "/products/fetchAllProducts",
   async () => {
