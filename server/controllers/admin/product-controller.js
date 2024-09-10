@@ -1,3 +1,4 @@
+const Product = require("../../models/Product");
 const { imageUploadUtil } = require("../../utils/cloudinary");
 
 const handleImageUpload = async (req, res) => {
@@ -11,4 +12,42 @@ const handleImageUpload = async (req, res) => {
   }
 };
 
-module.exports = { handleImageUpload };
+const addProduct = async (req, res) => {
+  try {
+    const {
+      image,
+      title,
+      description,
+      category,
+      brand,
+      price,
+      salePrice,
+      totalStock,
+      averageReview,
+    } = req.body;
+    console.log(averageReview);
+
+    const newProduct = new Product({
+      image,
+      title,
+      description,
+      category,
+      brand,
+      price,
+      salePrice,
+      totalStock,
+      averageReview,
+    });
+
+    await newProduct.save();
+    res.status(201).json({
+      success: true,
+      data: newProduct,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Ocorreu um erro" });
+  }
+};
+
+module.exports = { handleImageUpload, addProduct };
