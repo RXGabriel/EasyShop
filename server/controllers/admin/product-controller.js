@@ -46,7 +46,10 @@ const addProduct = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: "Ocorreu um erro" });
+    res.status(500).json({
+      success: false,
+      message: "Ocorreu um erro",
+    });
   }
 };
 
