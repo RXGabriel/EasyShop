@@ -69,4 +69,42 @@ const fetchAllProducts = async (req, res) => {
   }
 };
 
-module.exports = { handleImageUpload, addProduct, fetchAllProducts };
+const editProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Produto não encontrado",
+      });
+    }
+
+    Object.keys(updates).forEach((key) => {
+      if (updates[key] !== undefined && updates[key] !== null) {
+        product[key] = updates[key];
+      }
+    });
+
+    await product.save();
+    return res.status(200).json({
+      success: true,
+      data: product,
+    });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({
+      success: false,
+      message: "Ocorreu um erro ao editar o produto",
+    });
+  }
+};
+
+module.exports = {
+  handleImageUpload,
+  addProduct,
+  fetchAllProducts,
+  editProduct,
+};
