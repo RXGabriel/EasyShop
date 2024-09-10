@@ -53,4 +53,20 @@ const addProduct = async (req, res) => {
   }
 };
 
-module.exports = { handleImageUpload, addProduct };
+const fetchAllProducts = async (req, res) => {
+  try {
+    const listOfProducts = await Product.find({});
+    res.status(200).json({
+      success: true,
+      data: listOfProducts,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Ocorreu um erro",
+    });
+  }
+};
+
+module.exports = { handleImageUpload, addProduct, fetchAllProducts };
