@@ -6,6 +6,11 @@ const handleImageUpload = async (req, res) => {
     const b64 = Buffer.from(req.file.buffer).toString("base64");
     const url = "data:" + req.file.mimetype + ";base64," + b64;
     const result = await imageUploadUtil(url);
+
+    res.json({
+      success: true,
+      result,
+    });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: "Ocorreu um erro" });
@@ -25,7 +30,7 @@ const addProduct = async (req, res) => {
       totalStock,
       averageReview,
     } = req.body;
-    console.log(averageReview);
+    console.log(averageReview, "averageReview");
 
     const newProduct = new Product({
       image,
@@ -107,21 +112,20 @@ const deleteProduct = async (req, res) => {
     const { id } = req.params;
     const product = await Product.findByIdAndDelete(id);
 
-    if (!product) {
+    if (!product)
       return res.status(404).json({
         success: false,
-        message: "Product not found",
+        message: "Produto não encontrado",
       });
-    }
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
-      message: "Product deleted successfully",
+      message: "Produto deletado com sucesso",
     });
-  } catch (e) {
-    console.error(e);
-    return res.status(500).json({
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
       success: false,
-      message: "An error occurred while deleting the product",
+      message: "Ocorreu um erro ao deletar o produto",
     });
   }
 };
