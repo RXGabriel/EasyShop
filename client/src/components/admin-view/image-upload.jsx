@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { Button } from "../ui/button";
 import axios from "axios";
 import { Skeleton } from "../ui/skeleton";
+
 function ProductImageUpload({
   imageFile,
   setImageFile,
@@ -36,7 +37,7 @@ function ProductImageUpload({
     if (droppedFile) setImageFile(droppedFile);
   }
 
-  function handleRemoteImage() {
+  function handleRemoveImage() {
     setImageFile(null);
     if (inputRef.current) {
       inputRef.current.value = "";
@@ -109,7 +110,7 @@ function ProductImageUpload({
               variant="ghost"
               size="icon"
               className="text-muted-foreground hover:text-foreground"
-              onClick={handleRemoteImage}
+              onClick={handleRemoveImage}
             >
               <XIcon className="w-4 h-4" />
               <span className="sr-only">Remove File</span>
