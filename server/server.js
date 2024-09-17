@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const authRouter = require("./routes/auth/auth-routes");
 const adminProductsRouter = require("./routes/admin/product-routes");
-const adminOrderRouter = require("./routes/admin/order-routes ");
+const adminOrderRouter = require("./routes/admin/order-routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
