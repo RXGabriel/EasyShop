@@ -5,6 +5,7 @@ const cors = require("cors");
 const authRouter = require("./routes/auth/auth-routes");
 const adminProductsRouter = require("./routes/admin/product-routes");
 const adminOrderRouter = require("./routes/admin/order-routes");
+const commonFeatureRouter = require("./routes/common/feature-routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -38,6 +39,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/admin/orders", adminOrderRouter);
+app.use("/api/common/feature", commonFeatureRouter);
 
 app.get("/", (req, res) => {
   res.send("API rodando");
