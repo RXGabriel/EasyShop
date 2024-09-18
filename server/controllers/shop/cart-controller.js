@@ -13,7 +13,7 @@ const addToCart = async (req, res) => {
 
     const product = await Product.findById(productId);
     if (!product) {
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
         message: "Produto não encontrado",
       });
@@ -49,7 +49,8 @@ const addToCart = async (req, res) => {
 
 const fetchCartItems = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.params;
+
     if (!userId) {
       return res.status(400).json({
         success: false,
@@ -62,7 +63,7 @@ const fetchCartItems = async (req, res) => {
       select: "image title price salePrice",
     });
     if (!cart) {
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
         message: "Carrinho não encontrado",
       });
@@ -82,7 +83,7 @@ const fetchCartItems = async (req, res) => {
       title: item.productId.title,
       price: item.productId.price,
       salePrice: item.productId.salePrice,
-      quantity: item.productId.quantity,
+      quantity: item.quantity,
     }));
 
     res.status(200).json({
@@ -157,7 +158,7 @@ const updateCartItemQuantity = async (req, res) => {
 
 const deleteCartItem = async (req, res) => {
   try {
-    const { userId, productId } = req.body;
+    const { userId, productId } = req.params;
     if (!userId || !productId) {
       return res.status(400).json({
         success: false,
