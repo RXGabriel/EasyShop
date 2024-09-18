@@ -47,4 +47,55 @@ const addToCart = async (req, res) => {
   }
 };
 
-module.exports = { addToCart };
+const fetchCartItems = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "Usuário inválido",
+      });
+    }
+
+    const cart = await Cart.findOne({ userId }).populate({
+      path: "items.productId",
+      select: "image title price salePrice",
+    });
+    if (!cart) {
+      return res.status(400).json({
+        success: false,
+        message: "Carrinho não encontrado",
+      });
+    }
+
+    const validItems = cart.items.filter(
+      (productItem) => productItem.productId
+    );
+    if (validItems.length < cart.items.length) {
+      cart.items = validItems;
+      await cart.save();
+    }
+
+    const populateCartItems = validItems.map((item) => ({
+      productId: item.productId._id,
+      image: item.productId.image,
+      title: item.productId.title,
+      price: item.productId.price,
+      salePrice: item.productId.salePrice,
+      quantity: item.productId.quantity,
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: { ...cart._doc, items: populateCartItems },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Ocorreu um erro",
+    });
+  }
+};
+
+module.exports = { addToCart, fetchCartItems };
