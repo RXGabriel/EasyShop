@@ -1,8 +1,11 @@
 import { toast } from "@/hooks/use-toast";
-import { updateCartQuantity } from "@/store/shop-slice/cart-slice";
+import {
+  deleteCartItem,
+  updateCartQuantity,
+} from "@/store/shop-slice/cart-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../ui/button";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Trash } from "lucide-react";
 
 function UserCartItemsContent({ cartItem }) {
   const { cartItems } = useSelector((state) => state.shopCart);
@@ -56,6 +59,18 @@ function UserCartItemsContent({ cartItem }) {
     });
   }
 
+  function handleCartItemDelete(getCartItem) {
+    dispatch(
+      deleteCartItem({ userId: user?.id, productId: getCartItem?.productId })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        toast({
+          title: "Item do carrinho removido com sucesso",
+        });
+      }
+    });
+  }
+
   return (
     <div className="flex items-center space-x-4">
       <img
@@ -88,6 +103,20 @@ function UserCartItemsContent({ cartItem }) {
             <span className="sr-only">Aumentar</span>
           </Button>
         </div>
+      </div>
+      <div className="flex flex-col items-end">
+        <p className="font-semibold">
+          $
+          {(
+            (cartItem?.salePrice > 0 ? cartItem?.salePrice : cartItem?.price) *
+            cartItem?.quantity
+          ).toFixed(2)}
+        </p>
+        <Trash
+          onClick={() => handleCartItemDelete(cartItem)}
+          className="cursor-pointer mt-1"
+          size={20}
+        />
       </div>
     </div>
   );
