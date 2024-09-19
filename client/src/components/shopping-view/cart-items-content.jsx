@@ -1,9 +1,9 @@
-import { toast } from "@/hooks/use-toast";
 import {
   deleteCartItem,
   updateCartQuantity,
 } from "@/store/shop-slice/cart-slice";
 import { useDispatch, useSelector } from "react-redux";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "../ui/button";
 import { Minus, Plus, Trash } from "lucide-react";
 
@@ -12,13 +12,14 @@ function UserCartItemsContent({ cartItem }) {
   const { productList } = useSelector((state) => state.shopProducts);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const { toast } = useToast();
 
   function handleUpdateQuantity(getCartItem, typeOfAction) {
     if (typeOfAction == "plus") {
       let getCartItems = cartItems.items || [];
 
       if (getCartItems.length) {
-        const indexOfCurrentCartItem = getCartItem.findIndex(
+        const indexOfCurrentCartItem = getCartItems.findIndex(
           (item) => item.productId === getCartItem?.productId
         );
 
