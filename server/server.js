@@ -8,6 +8,7 @@ const adminOrderRouter = require("./routes/admin/order-routes");
 const commonFeatureRouter = require("./routes/common/feature-routes");
 const shopCartRouter = require("./routes/shop/cart-routes");
 const shopProductsRouter = require("./routes/shop/products-routes");
+const shopReviewRouter = require("./routes/shop/review-routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -44,6 +45,7 @@ app.use("/api/admin/orders", adminOrderRouter);
 app.use("/api/common/feature", commonFeatureRouter);
 app.use("/api/shop/cart", shopCartRouter);
 app.use("/api/shop/products", shopProductsRouter);
+app.use("/api/shop/review", shopReviewRouter);
 
 app.get("/", (req, res) => {
   res.send("API rodando");
