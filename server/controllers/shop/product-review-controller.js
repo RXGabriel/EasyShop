@@ -58,4 +58,22 @@ const addProductReview = async (req, res) => {
   }
 };
 
-module.exports = { addProductReview };
+const getProductReviews = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const reviews = await ProductReview.find({ productId });
+
+    res.status(200).json({
+      success: true,
+      data: reviews,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Ocorreu um erro ao recuperar os comentários",
+    });
+  }
+};
+
+module.exports = { addProductReview, getProductReviews };
