@@ -1,11 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { setProductDetails } from "@/store/products-slice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StarRatingComponent from "../common/star-rating";
 import { Button } from "../ui/button";
 import { toast } from "@/hooks/use-toast";
 import { addToCart, fetchCartItems } from "@/store/shop-slice/cart-slice";
+import { Separator } from "../ui/separator";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { addReview, getReviews } from "@/store/review-slice";
 
 function ProductDetailsDialog({ open, setOpen, productDetails }) {
   const dispatch = useDispatch();
@@ -55,11 +60,38 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
     });
   }
 
+  function handleRatingChange(getRating) {
+    setRating(getRating);
+  }
+
+  function handleAddReview() {
+    dispatch(
+      addReview({
+        productId: productDetails._id,
+        userId: user?.id,
+        userName: user?.userName,
+        reviewMessage: reviewMsg,
+        reviewValue: rating,
+      })
+    ).then((data) => {
+      if (data.payload.success) {
+        setRating(0);
+        setReviewMsg("");
+        dispatch(getReviews(productDetails?._id));
+        toast({ title: "Comentário adicionado com sucesso" });
+      }
+    });
+  }
+
   const averageReview =
     reviews && reviews.length > 0
       ? reviews.reduce((sum, reviewItem) => sum + reviewItem.reviewValue, 0) /
         reviews.length
       : 0;
+
+  useEffect(() => {
+    if (productDetails !== null) dispatch(getReviews(productDetails?._id));
+  }, [productDetails]);
 
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
@@ -121,6 +153,62 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
               Adicionar no carrinho
             </Button>
           )}
+        </div>
+        <Separator />
+
+        <div className="max-h-[300px] overflow-auto">
+          <h2 className="text-xl font-bold mb-4">Comentários</h2>
+          <div className="grid gap-6">
+            {reviews && reviews.length > 0 ? (
+              reviews.map((reviewItem) => (
+                <div className="flex gap-4" key={reviewItem._id}>
+                  <Avatar className="w-10 h-10 border">
+                    <AvatarFallback>
+                      {reviewItem?.userName[0].toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+
+                  <div className="grid gap-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-bold">{reviewItem?.userName}</h3>
+                    </div>
+
+                    <div className="flex items-center gap-0.5">
+                      <StarRatingComponent rating={reviewItem?.reviewValue} />
+                    </div>
+
+                    <p>{reviewItem.reviewMessage}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <h1>Nenhum comentário</h1>
+            )}
+          </div>
+
+          <div className="mt-10 flex-col flex gap-2">
+            <Label>Escreva um comentário</Label>
+            <div className="mt-10 flex-col flex gap-2">
+              <StarRatingComponent
+                rating={rating}
+                handleRatingChange={handleRatingChange}
+              />
+            </div>
+
+            <Input
+              className="reviewMsg"
+              value={reviewMsg}
+              onChange={(event) => setReviewMsg(event.target.value)}
+              placeholder="Escreva um comentário..."
+            />
+
+            <Button
+              onChange={handleAddReview}
+              disabled={reviewMsg.trim() === ""}
+            >
+              Enviar
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
