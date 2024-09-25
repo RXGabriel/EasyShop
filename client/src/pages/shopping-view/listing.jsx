@@ -1,4 +1,6 @@
 import ProductFilter from "@/components/shopping-view/filter";
+import ProductDetailsDialog from "@/components/shopping-view/product-details";
+import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,9 +10,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
+import { toast } from "@/hooks/use-toast";
+import { fetchProductDetails } from "@/store/products-slice";
+import { addToCart, fetchCartItems } from "@/store/shop-slice/cart-slice";
 import { ArrowDownIcon } from "lucide-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function ShoppingListing() {
   const [filters, setFilters] = useState({});
@@ -18,6 +23,10 @@ function ShoppingListing() {
     (state) => state.shopProducts
   );
   const [sort, setSort] = useState(null);
+  const dispatch = useDispatch();
+  const { cartItems } = useSelector((state) => state.shopCart);
+  const { user } = useSelector((state) => state.auth);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   function handleFilter(getSectionId, getCurrentOption) {
     let cpyFilters = { ...filters };
@@ -41,6 +50,47 @@ function ShoppingListing() {
   function handleSort(value) {
     setSort(value);
   }
+
+  function handleGetProductDetails(getCurrentProductId) {
+    dispatch(fetchProductDetails(getCurrentProductId));
+  }
+
+  function handleAddToCart(getCurrentProductId, getTotalStock) {
+    let getCartItems = cartItems.items || [];
+
+    if (getCartItems.length) {
+      const indexOfCurrentItem = getCartItems.findIndex(
+        (item) => item.productId === getCurrentProductId
+      );
+
+      if (indexOfCurrentItem > -1) {
+        const getQuantity = getCartItems[indexOfCurrentItem].quantity;
+        if (getQuantity + 1 > getTotalStock) {
+          toast({
+            title: `Somente ${getTotalStock} pode ser adicionado a esse item`,
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+    }
+
+    dispatch(
+      addToCart({
+        userId: user?.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast({
+          title: "Produto adicionado ao carrinho",
+        });
+      }
+    });
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
       <ProductFilter filters={filters} handleFilter={handleFilter} />
@@ -79,7 +129,26 @@ function ShoppingListing() {
             </DropdownMenu>
           </div>
         </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+          {productList && productList.length > 0
+            ? productList.map((productItem) => (
+                <ShoppingProductTile
+                  key={productItem.id}
+                  handleGetProductDetails={handleGetProductDetails}
+                  product={productItem}
+                  handleAddToCart={handleAddToCart}
+                />
+              ))
+            : null}
+        </div>
       </div>
+
+      <ProductDetailsDialog
+        open={openDetailsDialog}
+        setOpen={setOpenDetailsDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 }
