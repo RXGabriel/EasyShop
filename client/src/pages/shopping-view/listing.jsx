@@ -10,13 +10,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import {
   fetchAllFilteredProducts,
   fetchProductDetails,
 } from "@/store/products-slice";
 import { addToCart, fetchCartItems } from "@/store/shop-slice/cart-slice";
-import { ArrowDownIcon } from "lucide-react";
+import { ArrowUpDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
@@ -32,6 +32,7 @@ function ShoppingListing() {
   const { user } = useSelector((state) => state.auth);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { toast } = useToast();
   const categorySearchParam = searchParams.get("category");
 
   function handleFilter(getSectionId, getCurrentOption) {
@@ -73,7 +74,7 @@ function ShoppingListing() {
         const getQuantity = getCartItems[indexOfCurrentItem].quantity;
         if (getQuantity + 1 > getTotalStock) {
           toast({
-            title: `Somente ${getTotalStock} pode ser adicionado a esse item`,
+            title: `Somente ${getQuantity} pode ser adicionado a esse item`,
             variant: "destructive",
           });
           return;
@@ -105,8 +106,8 @@ function ShoppingListing() {
         const paramValue = value.join(",");
         queryParams.push(`${key}=${encodeURIComponent(paramValue)}`);
       }
-      return queryParams.join("&");
     }
+    return queryParams.join("&");
   }
 
   useEffect(() => {
@@ -150,7 +151,7 @@ function ShoppingListing() {
                   size="sm"
                   className="flex items-center gap-1"
                 >
-                  <ArrowDownIcon className="h-4 w-4" />
+                  <ArrowUpDownIcon className="h-4 w-4" />
                   <span>Ordenar por</span>
                 </Button>
               </DropdownMenuTrigger>
