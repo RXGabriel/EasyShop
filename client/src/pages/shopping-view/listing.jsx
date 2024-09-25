@@ -11,11 +11,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
 import { toast } from "@/hooks/use-toast";
-import { fetchProductDetails } from "@/store/products-slice";
+import {
+  fetchAllFilteredProducts,
+  fetchProductDetails,
+} from "@/store/products-slice";
 import { addToCart, fetchCartItems } from "@/store/shop-slice/cart-slice";
 import { ArrowDownIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 function ShoppingListing() {
   const [filters, setFilters] = useState({});
@@ -27,6 +31,8 @@ function ShoppingListing() {
   const { cartItems } = useSelector((state) => state.shopCart);
   const { user } = useSelector((state) => state.auth);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categorySearchParam = searchParams.get("category");
 
   function handleFilter(getSectionId, getCurrentOption) {
     let cpyFilters = { ...filters };
@@ -90,6 +96,41 @@ function ShoppingListing() {
       }
     });
   }
+
+  function createSearchParamsHelper(filterParams) {
+    const queryParams = [];
+
+    for (const [key, value] of Object.entries(filterParams)) {
+      if (Array.isArray(value) && value.length > 0) {
+        const paramValue = value.join(",");
+        queryParams.push(`${key}=${encodeURIComponent(paramValue)}`);
+      }
+      return queryParams.join("&");
+    }
+  }
+
+  useEffect(() => {
+    setSort("price-lowtohigh");
+    setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
+  }, [categorySearchParam]);
+
+  useEffect(() => {
+    if (filters && Object.keys(filters).length > 0) {
+      const createQueryString = createSearchParamsHelper(filters);
+      setSearchParams(new URLSearchParams(createQueryString));
+    }
+  }, [filters]);
+
+  useEffect(() => {
+    if (filters !== null && sort !== null)
+      dispatch(
+        fetchAllFilteredProducts({ filterParams: filters, sortParams: sort })
+      );
+  }, [dispatch, sort, filters]);
+
+  useEffect(() => {
+    if (productDetails !== null) setOpenDetailsDialog(true);
+  }, [productDetails]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
