@@ -12,11 +12,16 @@ import Nike from "../../assets/nike.png";
 import Adidas from "../../assets/adidas.png";
 import Zara from "../../assets/zara.png";
 import Puma from "../../assets/puma.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import ShoppingProductTile from "@/components/shopping-view/product-tile";
+import { fetchProductDetails } from "@/store/products-slice";
+import { addToCart, fetchCartItems } from "@/store/shop-slice/cart-slice";
+import { toast } from "@/hooks/use-toast";
+import ProductDetailsDialog from "@/components/shopping-view/product-details";
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: Men },
@@ -39,6 +44,12 @@ function ShoppingHome() {
   const { featureImageList } = useSelector((state) => state.commonFeature);
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   function handleNavigateToListingPage(getCurrentIcon, section) {
     sessionStorage.removeItem("filters");
@@ -48,6 +59,25 @@ function ShoppingHome() {
 
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
     navigate(`/shop/listing`);
+  }
+
+  function handleGetProductDetails(getCurrentProductId) {
+    dispatch(fetchProductDetails(getCurrentProductId));
+  }
+
+  function handleAddToCart(getCurrentProductId) {
+    dispatch(
+      addToCart({
+        userId: user?.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast({ title: "Produto adicionado com sucesso" });
+      }
+    });
   }
 
   return (
@@ -103,6 +133,55 @@ function ShoppingHome() {
           </div>
         </div>
       </section>
+
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Ordenar por marca
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {brandsWithIcon.map((brandItem) => (
+              <Card
+                key={brandItem.id}
+                onClick={() => handleNavigateToListingPage(brandItem, "brand")}
+                className="cursor-pointer hover:shadow-lg transition-shadow"
+              >
+                <CardContent className="flex flex-col items-center justify-center p-6">
+                  <brandItem.icon className="w-12 h-12 mb-4 text-primary" />
+                  <span className="font-bold">{brandItem.label}</span>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Futuros produtos
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {productList && productList.length > 0
+              ? productList.map((productItem) => (
+                  <ShoppingProductTile
+                    key={productItem.id}
+                    handleGetProductDetails={handleGetProductDetails}
+                    product={productItem}
+                    handleAddToCart={handleAddToCart}
+                  />
+                ))
+              : null}
+          </div>
+        </div>
+      </section>
+
+      <ProductDetailsDialog
+        open={openDetailsDialog}
+        setOpen={setOpenDetailsDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 }
