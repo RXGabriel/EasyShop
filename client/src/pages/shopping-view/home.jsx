@@ -1,6 +1,7 @@
 import {
   Airplay,
   BabyIcon,
+  ChevronLeftIcon,
   ChevronRightIcon,
   Heater,
   WatchIcon,
@@ -19,8 +20,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { fetchProductDetails } from "@/store/products-slice";
+import { useToast } from "@/hooks/use-toast";
 import { addToCart, fetchCartItems } from "@/store/shop-slice/cart-slice";
-import { toast } from "@/hooks/use-toast";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 
 const categoriesWithIcon = [
@@ -51,10 +52,11 @@ function ShoppingHome() {
   const { user } = useSelector((state) => state.auth);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
-  function handleNavigateToListingPage(getCurrentIcon, section) {
+  const { toast } = useToast();
+  function handleNavigateToListingPage(getCurrentItem, section) {
     sessionStorage.removeItem("filters");
     const currentFilter = {
-      [section]: [getCurrentIcon.id],
+      [section]: [getCurrentItem.id],
     };
 
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
@@ -87,7 +89,6 @@ function ShoppingHome() {
           ? featureImageList.map((slide, index) => (
               <img
                 src={slide?.image}
-                alt={index}
                 key={index}
                 className={`${
                   index === currentSlide ? "opacity-100" : "opacity-0"
@@ -101,10 +102,24 @@ function ShoppingHome() {
           size="icon"
           onClick={() =>
             setCurrentSlide(
-              (prevSlide) => (prevSlide + 1) % featureImageList.length // Muda para o próximo slide
+              (prevSlide) =>
+                (prevSlide - 1 + featureImageList.length) %
+                featureImageList.length
             )
           }
           className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80"
+        >
+          <ChevronLeftIcon className="w-4 h-4" />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() =>
+            setCurrentSlide(
+              (prevSlide) => (prevSlide + 1) % featureImageList.length
+            )
+          }
+          className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80"
         >
           <ChevronRightIcon className="w-4 h-4" />
         </Button>
