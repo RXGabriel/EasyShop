@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Dialog, DialogContent } from "../ui/dialog";
-import { setProductDetails } from "@/store/products-slice";
+import { setProductDetails } from "@/store/shop-slice/products-slice";
 import { useEffect, useState } from "react";
 import StarRatingComponent from "../common/star-rating";
 import { Button } from "../ui/button";
@@ -10,7 +10,7 @@ import { Separator } from "../ui/separator";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { addReview, getReviews } from "@/store/review-slice";
+import { addReview, getReviews } from "@/store/shop-slice/review-slice";
 
 function ProductDetailsDialog({ open, setOpen, productDetails }) {
   const dispatch = useDispatch();

@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
-import { fetchProductDetails } from "@/store/products-slice";
+import { fetchProductDetails } from "@/store/shop-slice/products-slice";
 import { useToast } from "@/hooks/use-toast";
 import { addToCart, fetchCartItems } from "@/store/shop-slice/cart-slice";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";

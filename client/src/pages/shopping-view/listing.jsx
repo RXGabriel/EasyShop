@@ -14,7 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import {
   fetchAllFilteredProducts,
   fetchProductDetails,
-} from "@/store/products-slice";
+} from "@/store/shop-slice/products-slice";
 import { addToCart, fetchCartItems } from "@/store/shop-slice/cart-slice";
 import { ArrowUpDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
