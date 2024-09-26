@@ -14,15 +14,19 @@ import Adidas from "../../assets/adidas.png";
 import Zara from "../../assets/zara.png";
 import Puma from "../../assets/puma.png";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
-import { fetchProductDetails } from "@/store/shop-slice/products-slice";
+import {
+  fetchAllFilteredProducts,
+  fetchProductDetails,
+} from "@/store/shop-slice/products-slice";
 import { useToast } from "@/hooks/use-toast";
 import { addToCart, fetchCartItems } from "@/store/shop-slice/cart-slice";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
+import { getFeatureImages } from "@/store/common-slice";
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: Men },
@@ -81,6 +85,31 @@ function ShoppingHome() {
       }
     });
   }
+
+  useEffect(() => {
+    if (productDetails !== null) setOpenDetailsDialog(true);
+  }, [productDetails]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % featureImageList.length);
+    }, 15000);
+
+    return () => clearInterval(timer);
+  }, [featureImageList]);
+
+  useEffect(() => {
+    dispatch(
+      fetchAllFilteredProducts({
+        filterParams: {},
+        sortParams: "price-lowtohigh",
+      })
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getFeatureImages());
+  }, [dispatch]);
 
   return (
     <div className="flex flex-col min-h-screen">
