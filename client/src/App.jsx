@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import UnauthPage from "./pages/unauth-page";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
-import { Skeleton } from "./components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -30,7 +30,7 @@ function App() {
     dispatch(checkAuth());
   }, [dispatch]);
 
-  if (isLoading) return <Skeleton className="w-[80] bg-black h-[600px]" />;
+  if (isLoading) return <Skeleton className="w-[800] bg-black h-[600px]" />;
   console.log(isLoading, user);
 
   return (
@@ -44,7 +44,7 @@ function App() {
               user={user}
             ></CheckAuth>
           }
-        ></Route>
+        />
 
         <Route
           path="/auth"
