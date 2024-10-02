@@ -1,4 +1,4 @@
-const Address = require("../models/Address");
+const Address = require("../../models/Address");
 
 const addAddress = async (req, res) => {
   try {
@@ -95,4 +95,34 @@ const fetchAllAddress = async (req, res) => {
   }
 };
 
-module.exports = { addAddress, editAddress };
+const deleteAddress = async (req, res) => {
+  try {
+    const { userId, addressId } = req.params;
+    if (!userId || !addressId) {
+      return res.status(400).json({
+        success: false,
+        message: "Usuário e endereço são obrigatórios",
+      });
+    }
+
+    const address = await Address.finOneAndDelete({ _id: addressId, userId });
+    if (!address) {
+      return res.status(404).json({
+        success: false,
+        message: "Endereço não encontrado",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Endereço excluído com sucesso",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Ocorreu um erro ao tentar deletar o endereço",
+    });
+  }
+};
+
+module.exports = { addAddress, editAddress, fetchAllAddress, deleteAddress };
