@@ -19,6 +19,7 @@ import UnauthPage from "./pages/unauth-page";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
 import { Skeleton } from "@/components/ui/skeleton";
+import SearchProducts from "./pages/shopping-view/search";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -84,6 +85,7 @@ function App() {
           <Route path="listing" element={<ShoppingListing />} />
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
+          <Route path="search" element={<SearchProducts />} />
         </Route>
 
         <Route path="/unauth-page" element={<UnauthPage />} />
