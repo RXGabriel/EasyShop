@@ -71,4 +71,28 @@ const editAddress = async (req, res) => {
   }
 };
 
+const fetchAllAddress = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "Usuário inválido",
+      });
+    }
+
+    const addressList = await Address.find({ userId });
+    res.status(200).json({
+      success: true,
+      data: addressList,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Ocorreu um erro ao tentar recuperar os endereços",
+    });
+  }
+};
+
 module.exports = { addAddress, editAddress };
