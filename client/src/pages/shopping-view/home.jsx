@@ -1,47 +1,47 @@
+import { Button } from "@/components/ui/button";
 import {
   Airplay,
   BabyIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  CloudLightning,
+  Footprints,
   Heater,
+  Images,
+  Shirt,
+  ShirtIcon,
+  ShoppingBasket,
+  WashingMachine,
   WatchIcon,
 } from "lucide-react";
-import Men from "../../assets/man.png";
-import Sneakers from "../../assets/sneakers.png";
-import Woman from "../../assets/woman.png";
-import Nike from "../../assets/nike.png";
-import Adidas from "../../assets/adidas.png";
-import Zara from "../../assets/zara.png";
-import Puma from "../../assets/puma.png";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
-import ShoppingProductTile from "@/components/shopping-view/product-tile";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAllFilteredProducts,
   fetchProductDetails,
 } from "@/store/shop-slice/products-slice";
-import { useToast } from "@/hooks/use-toast";
+import ShoppingProductTile from "@/components/shopping-view/product-tile";
+import { useNavigate } from "react-router-dom";
 import { addToCart, fetchCartItems } from "@/store/shop-slice/cart-slice";
+import { useToast } from "@/hooks/use-toast";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import { getFeatureImages } from "@/store/common-slice";
 
 const categoriesWithIcon = [
-  { id: "men", label: "Men", icon: Men },
-  { id: "women", label: "Women", icon: Woman },
+  { id: "men", label: "Homem", icon: ShirtIcon },
+  { id: "women", label: "Mulher", icon: CloudLightning },
   { id: "kids", label: "Kids", icon: BabyIcon },
-  { id: "accessories", label: "Accessories", icon: WatchIcon },
-  { id: "footwear", label: "Footwear", icon: Sneakers },
+  { id: "accessories", label: "acessórios", icon: WatchIcon },
+  { id: "footwear", label: "calçados", icon: Footprints },
 ];
 
 const brandsWithIcon = [
-  { id: "nike", label: "Nike", icon: Nike },
-  { id: "adidas", label: "Adidas", icon: Adidas },
-  { id: "puma", label: "Puma", icon: Puma },
+  { id: "nike", label: "Nike", icon: Shirt },
+  { id: "adidas", label: "Adidas", icon: WashingMachine },
+  { id: "puma", label: "Puma", icon: ShoppingBasket },
   { id: "levi", label: "Levi's", icon: Airplay },
-  { id: "zara", label: "Zara", icon: Zara },
+  { id: "zara", label: "Zara", icon: Images },
   { id: "h&m", label: "H&M", icon: Heater },
 ];
 
@@ -118,7 +118,7 @@ function ShoppingHome() {
           ? featureImageList.map((slide, index) => (
               <img
                 src={slide?.image}
-                key={index}
+                key={index.id}
                 className={`${
                   index === currentSlide ? "opacity-100" : "opacity-0"
                 } absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
@@ -203,7 +203,7 @@ function ShoppingHome() {
       <section className="py-12">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">
-            Futuros produtos
+            Todos os produtos
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
