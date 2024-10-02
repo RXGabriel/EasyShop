@@ -24,7 +24,7 @@ function ShoppingProductTile({
             </Badge>
           ) : product?.totalStock < 10 ? (
             <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">
-              {`Somente ${product?.totalStock} items restantes`}
+              {`Somente R${product?.totalStock} items restantes`}
             </Badge>
           ) : product?.salePrice > 0 ? (
             <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">

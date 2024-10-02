@@ -85,7 +85,7 @@ function SearchProducts() {
             name="keyword"
             onChange={(event) => setKeyword(event.target.value)}
             className="py-6"
-            placeholder="Pesquisar..."
+            placeholder="Pesquise por um produto..."
           />
         </div>
       </div>

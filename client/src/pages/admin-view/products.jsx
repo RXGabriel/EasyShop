@@ -75,7 +75,7 @@ function AdminProducts() {
             setImageFile(null);
             setFormData(initialFormData);
             toast({
-              title: "Produto adicionado co sucesso",
+              title: "Produto adicionado com sucesso",
             });
           }
         });
