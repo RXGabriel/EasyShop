@@ -28,7 +28,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
   }
 
   function handleAddToCart(getCurrentProductId, getTotalStock) {
-    let getCartItems = cartItems.items || [];
+    const getCartItems = cartItems.items || [];
 
     if (getCartItems.length) {
       const indexOfCurrentItem = getCartItems.findIndex(
@@ -38,7 +38,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
         const getQuantity = getCartItems[indexOfCurrentItem].quantity;
         if (getQuantity + 1 > getTotalStock) {
           toast({
-            title: `Somente ${getQuantity} quantidade pode ser adicionado a esse item`,
+            title: `Somente ${getQuantity} quantidade pode ser adicionada a esse item`,
             variant: "destructive",
           });
           return;
@@ -122,11 +122,11 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
             R${productDetails?.price}
           </p>
 
-          {productDetails?.salePrice > 0 ? (
+          {productDetails?.salePrice > 0 && (
             <p className="text-2xl font-bold text-muted-foreground">
               {productDetails?.salePrice}
             </p>
-          ) : null}
+          )}
         </div>
 
         <div className="flex items-center gap-2 mt-2">
@@ -188,22 +188,19 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
 
           <div className="mt-10 flex-col flex gap-2">
             <Label>Escreva um comentário</Label>
-            <div className="mt-10 flex-col flex gap-2">
-              <StarRatingComponent
-                rating={rating}
-                handleRatingChange={handleRatingChange}
-              />
-            </div>
+            <StarRatingComponent
+              rating={rating}
+              handleRatingChange={handleRatingChange}
+            />
 
             <Input
-              className="reviewMsg"
               value={reviewMsg}
               onChange={(event) => setReviewMsg(event.target.value)}
               placeholder="Escreva um comentário..."
             />
 
             <Button
-              onChange={handleAddReview}
+              onClick={handleAddReview}
               disabled={reviewMsg.trim() === ""}
             >
               Enviar
