@@ -34,4 +34,41 @@ const addAddress = async (req, res) => {
   }
 };
 
-module.exports = { addAddress };
+const editAddress = async (req, res) => {
+  try {
+    const { userId, addressId } = req.params;
+    const formData = req.body;
+
+    if (!userId || !addressId) {
+      res.status(400).json({
+        success: false,
+        message: "Usuário e endereço é necessário",
+      });
+    }
+
+    const address = await Address.findOneAndUpdate(
+      { _id: addressId, userId },
+      formData,
+      { new: true }
+    );
+    if (!address) {
+      return res.status(404).json({
+        success: false,
+        message: "Endereço não encontrado",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: address,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Ocorreu um erro ao tentar editar o endereço",
+    });
+  }
+};
+
+module.exports = { addAddress, editAddress };
