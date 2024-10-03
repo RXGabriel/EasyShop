@@ -1,6 +1,5 @@
 const paypal = require("../../utils/paypal");
-const Order = require("../../utils/paypal");
-
+const Order = require("../../models/Order");
 const createOrder = async (req, res) => {
   try {
     const {
@@ -113,4 +112,29 @@ const getAllOrdersByUser = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, getAllOrdersByUser };
+const getOrderDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found!",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: order,
+    });
+  } catch (error) {
+    console.log(e);
+    res.status(500).json({
+      success: false,
+      message: "Ocorreu um erro ao buscar os detalhes do pedido.",
+    });
+  }
+};
+
+module.exports = { createOrder, getAllOrdersByUser, getOrderDetails };
