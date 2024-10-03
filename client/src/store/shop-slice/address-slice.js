@@ -17,6 +17,17 @@ export const addNewAddress = createAsyncThunk(
   }
 );
 
+export const editAddress = createAsyncThunk(
+  "address/editAddress",
+  async ({ userId, addressId, formData }) => {
+    const response = await axios.put(
+      `http://localhost:5000/api/shop/address/update/${userId}/${addressId}`,
+      formData
+    );
+    return response.data;
+  }
+);
+
 const addressSlice = createSlice({
   name: "address",
   initialState,
