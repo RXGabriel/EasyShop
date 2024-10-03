@@ -11,6 +11,7 @@ const shopProductsRouter = require("./routes/shop/products-routes");
 const shopReviewRouter = require("./routes/shop/review-routes");
 const shopSearchRouter = require("./routes/shop/search-routes");
 const shopAddressRouter = require("./routes/shop/address-routes");
+const shopOrderRouter = require("./routes/shop/order-routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -50,6 +51,7 @@ app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/review", shopReviewRouter);
 app.use("/api/shop/search", shopSearchRouter);
 app.use("/api/shop/address", shopAddressRouter);
+app.use("/api/shop/order", shopOrderRouter);
 
 app.get("/", (req, res) => {
   res.send("API rodando");
