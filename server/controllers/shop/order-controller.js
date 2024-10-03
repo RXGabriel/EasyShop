@@ -1,4 +1,5 @@
 const paypal = require("../../utils/paypal");
+const Order = require("../../utils/paypal");
 
 const createOrder = async (req, res) => {
   try {
@@ -87,4 +88,29 @@ const createOrder = async (req, res) => {
   }
 };
 
-module.exports = { createOrder };
+const getAllOrdersByUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const orders = await Order.findById({ userId });
+
+    if (!orders.length) {
+      return res.status(404).json({
+        success: false,
+        message: "Erro ao buscar o pedido",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: orders,
+    });
+  } catch (error) {
+    console.log(e);
+    res.status(500).json({
+      success: false,
+      message: "Ocorreu um erro ao buscar os pedidos.",
+    });
+  }
+};
+
+module.exports = { createOrder, getAllOrdersByUser };
