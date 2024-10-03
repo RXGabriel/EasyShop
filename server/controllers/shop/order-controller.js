@@ -1,5 +1,8 @@
 const paypal = require("../../utils/paypal");
 const Order = require("../../models/Order");
+const Product = require("../../models/Product");
+const Cart = require("../../models/Cart");
+
 const createOrder = async (req, res) => {
   try {
     const {
@@ -137,4 +140,57 @@ const getOrderDetails = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, getAllOrdersByUser, getOrderDetails };
+const capturePayment = async (req, res) => {
+  try {
+    const { paymentId, payerId, orderId } = req.body;
+
+    let order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Pedido não encontrado",
+      });
+    }
+
+    order.paymentStatus = "paid";
+    order.orderStatus = "confirmed";
+    order.paymentId = paymentId;
+    order.payerId = payerId;
+
+    for (let item of order.cartItems) {
+      let product = await Product.findById(item.productId);
+      if (!product) {
+        return res.status(404).json({
+          success: false,
+          message: `Sem estoque suficiente para esse produto ${product.title}`,
+        });
+      }
+
+      product.totalStock -= item.quantity;
+      await product.save();
+    }
+
+    const getCartId = order.cartId;
+    await Cart.findByIdAndDelete(getCartId);
+    await order.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Pedido confirmado",
+      data: order,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Ocorreu um erro ao capturar o pagamento.",
+    });
+  }
+};
+
+module.exports = {
+  createOrder,
+  getAllOrdersByUser,
+  getOrderDetails,
+  capturePayment,
+};
