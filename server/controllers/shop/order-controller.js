@@ -123,7 +123,7 @@ const getOrderDetails = async (req, res) => {
     if (!order) {
       return res.status(404).json({
         success: false,
-        message: "Order not found!",
+        message: "Pedido não encontrado",
       });
     }
 
@@ -132,7 +132,7 @@ const getOrderDetails = async (req, res) => {
       data: order,
     });
   } catch (error) {
-    console.log(e);
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Ocorreu um erro ao buscar os detalhes do pedido.",
