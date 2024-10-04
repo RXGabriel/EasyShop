@@ -10,20 +10,32 @@ import {
 } from "../ui/table";
 import { Badge } from "../ui/badge";
 import { Dialog } from "../ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { resetOrderDetails } from "@/store/admin-slice/order-slice";
 import { Button } from "../ui/button";
-import { getOrderDetails } from "@/store/shop-slice/order-slice";
+import {
+  getAllOrdersByUserId,
+  getOrderDetails,
+} from "@/store/shop-slice/order-slice";
 import ShoppingOrderDetailsView from "./order-details";
 
 function ShoppingOrders() {
   const { orderList, orderDetails } = useSelector((state) => state.shopOrder);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
 
   function handleFetchOrderDetails(getId) {
     dispatch(getOrderDetails(getId));
   }
+
+  useEffect(() => {
+    dispatch(getAllOrdersByUserId(user?.id));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (orderDetails !== null) setOpenDetailsDialog(true);
+  }, [orderDetails]);
 
   return (
     <Card>
