@@ -54,7 +54,7 @@ const createOrder = async (req, res) => {
           message: "Erro ao criar o pagamento.",
         });
       } else {
-        const createOrder = await Order.create({
+        const createOrder = new Order({
           userId,
           cartId,
           cartItems,
@@ -72,7 +72,7 @@ const createOrder = async (req, res) => {
         await createOrder.save();
         const approvalURL = paymentInfo.links.find(
           (link) => link.rel === "approval_url"
-        );
+        ).href;
 
         res.status(201).json({
           success: true,
