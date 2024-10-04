@@ -202,11 +202,11 @@ export const addressFormControls = [
     placeholder: "Digite sua cidade",
   },
   {
-    label: "CEP",
+    label: "Pincode",
     name: "pincode",
     componentType: "input",
     type: "text",
-    placeholder: "Digite seu CEP",
+    placeholder: "Digite seu pincode",
   },
   {
     label: "Telefone",
