@@ -30,6 +30,16 @@ export const getAllOrdersByUserId = createAsyncThunk(
   }
 );
 
+export const getOrderDetails = createAsyncThunk(
+  "/order/getOrderDetails",
+  async (id) => {
+    const response = await axios.get(
+      `http://localhost:5000/api/shop/order/details/${id}`
+    );
+    return response.data;
+  }
+);
+
 const shoppingOrderSlice = createSlice({
   name: "shoppingOrderSlice",
   initialState,
@@ -67,6 +77,17 @@ const shoppingOrderSlice = createSlice({
       .addCase(getAllOrdersByUserId.rejected, (state) => {
         state.isLoading = false;
         state.orderList = [];
+      })
+      .addCase(getOrderDetails.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getOrderDetails.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.orderDetails = action.payload.data;
+      })
+      .addCase(getOrderDetails.rejected, (state) => {
+        state.isLoading = false;
+        state.orderDetails = null;
       });
   },
 });
