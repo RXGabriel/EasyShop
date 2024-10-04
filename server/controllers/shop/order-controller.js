@@ -107,7 +107,7 @@ const getAllOrdersByUser = async (req, res) => {
       data: orders,
     });
   } catch (error) {
-    console.log(e);
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Ocorreu um erro ao buscar os pedidos.",
