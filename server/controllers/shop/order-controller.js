@@ -50,7 +50,7 @@ const createOrder = async (req, res) => {
       if (error) {
         console.log(error);
         return res.status(500).json({
-          success: true,
+          success: false,
           message: "Erro ao criar o pagamento.",
         });
       } else {
