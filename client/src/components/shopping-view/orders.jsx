@@ -1,5 +1,7 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Dialog } from "../ui/dialog";
 import {
   Table,
   TableBody,
@@ -8,21 +10,19 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Badge } from "../ui/badge";
-import { Dialog } from "../ui/dialog";
-import { useEffect, useState } from "react";
-import { resetOrderDetails } from "@/store/admin-slice/order-slice";
-import { Button } from "../ui/button";
+import ShoppingOrderDetailsView from "./order-details";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getAllOrdersByUserId,
   getOrderDetails,
-} from "@/store/shop-slice/order-slice";
-import ShoppingOrderDetailsView from "./order-details";
+  resetOrderDetails,
+} from "@/store/shop/order-slice";
+import { Badge } from "../ui/badge";
 
 function ShoppingOrders() {
-  const { orderList, orderDetails } = useSelector((state) => state.shopOrder);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const dispatch = useDispatch();
+  const { orderList, orderDetails } = useSelector((state) => state.shopOrder);
   const { user } = useSelector((state) => state.auth);
 
   function handleFetchOrderDetails(getId) {
@@ -37,30 +37,30 @@ function ShoppingOrders() {
     if (orderDetails !== null) setOpenDetailsDialog(true);
   }, [orderDetails]);
 
+  console.log(orderDetails, "orderDetails");
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Histórico de pedidos</CardTitle>
+        <CardTitle>Order History</CardTitle>
       </CardHeader>
-
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>ID do pedido</TableHead>
-              <TableHead>Data do pedido</TableHead>
-              <TableHead>Status do pedido</TableHead>
-              <TableHead>Preço do pedido</TableHead>
+              <TableHead>Order ID</TableHead>
+              <TableHead>Order Date</TableHead>
+              <TableHead>Order Status</TableHead>
+              <TableHead>Order Price</TableHead>
               <TableHead>
-                <span className="sr-only">Detalhes</span>
+                <span className="sr-only">Details</span>
               </TableHead>
             </TableRow>
           </TableHeader>
-
           <TableBody>
             {orderList && orderList.length > 0
               ? orderList.map((orderItem) => (
-                  <TableRow key={orderItem?._id}>
+                  <TableRow>
                     <TableCell>{orderItem?._id}</TableCell>
                     <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
                     <TableCell>
@@ -76,7 +76,7 @@ function ShoppingOrders() {
                         {orderItem?.orderStatus}
                       </Badge>
                     </TableCell>
-                    <TableCell>R${orderItem?.totalAmount}</TableCell>
+                    <TableCell>${orderItem?.totalAmount}</TableCell>
                     <TableCell>
                       <Dialog
                         open={openDetailsDialog}
@@ -90,9 +90,8 @@ function ShoppingOrders() {
                             handleFetchOrderDetails(orderItem?._id)
                           }
                         >
-                          Ver detalhes
+                          View Details
                         </Button>
-
                         <ShoppingOrderDetailsView orderDetails={orderDetails} />
                       </Dialog>
                     </TableCell>

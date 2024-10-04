@@ -7,7 +7,7 @@ const initialState = {
 };
 
 export const addNewAddress = createAsyncThunk(
-  "/address/addNewAddress",
+  "/addresses/addNewAddress",
   async (formData) => {
     const response = await axios.post(
       "http://localhost:5000/api/shop/address/add",
@@ -18,7 +18,7 @@ export const addNewAddress = createAsyncThunk(
 );
 
 export const editAddress = createAsyncThunk(
-  "address/editAddress",
+  "/addresses/editAddress",
   async ({ userId, addressId, formData }) => {
     const response = await axios.put(
       `http://localhost:5000/api/shop/address/update/${userId}/${addressId}`,
@@ -29,7 +29,7 @@ export const editAddress = createAsyncThunk(
 );
 
 export const fetchAllAddresses = createAsyncThunk(
-  "/address/fetchAllAddresses",
+  "/addresses/fetchAllAddresses",
   async (userId) => {
     const response = await axios.get(
       `http://localhost:5000/api/shop/address/get/${userId}`
@@ -39,7 +39,7 @@ export const fetchAllAddresses = createAsyncThunk(
 );
 
 export const deleteAddress = createAsyncThunk(
-  "/address/deleteAddress",
+  "/addresses/deleteAddress",
   async ({ userId, addressId }) => {
     const response = await axios.delete(
       `http://localhost:5000/api/shop/address/delete/${userId}/${addressId}`
