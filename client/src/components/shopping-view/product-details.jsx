@@ -75,14 +75,29 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
         reviewMessage: reviewMsg,
         reviewValue: rating,
       })
-    ).then((data) => {
-      if (data.payload.success) {
-        setRating(0);
-        setReviewMsg("");
-        dispatch(getReviews(productDetails?._id));
-        toast({ title: "Comentário adicionado com sucesso" });
-      }
-    });
+    )
+      .then((data) => {
+        console.log(data);
+        if (data && data.payload && data.payload.success) {
+          setRating(0);
+          setReviewMsg("");
+          dispatch(getReviews(productDetails?._id));
+          toast({ title: "Comentário adicionado com sucesso" });
+        } else {
+          toast({
+            title:
+              "Para enviar um comentário, é necessário comprar o produto primeiro",
+            variant: "destructive",
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error ao adicionar comentário", error);
+        toast({
+          title: "Error ao adicionar comentário",
+          variant: "destructive",
+        });
+      });
   }
 
   const averageReview =
