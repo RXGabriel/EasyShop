@@ -42,18 +42,18 @@ function ShoppingOrders() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Order History</CardTitle>
+        <CardTitle>Histórico de pedidos</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Order ID</TableHead>
-              <TableHead>Order Date</TableHead>
-              <TableHead>Order Status</TableHead>
-              <TableHead>Order Price</TableHead>
+              <TableHead>ID do pedido</TableHead>
+              <TableHead>Data do pedido</TableHead>
+              <TableHead>Status do pedido</TableHead>
+              <TableHead>Preço do pedido</TableHead>
               <TableHead>
-                <span className="sr-only">Details</span>
+                <span className="sr-only">Detalhes</span>
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -90,7 +90,7 @@ function ShoppingOrders() {
                             handleFetchOrderDetails(orderItem?._id)
                           }
                         >
-                          View Details
+                          Ver detalhes
                         </Button>
                         <ShoppingOrderDetailsView orderDetails={orderDetails} />
                       </Dialog>
