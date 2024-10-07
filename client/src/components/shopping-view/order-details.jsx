@@ -23,7 +23,7 @@ function ShoppingOrderDetailsView({ orderDetails }) {
 
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Preço do pedido</p>
-            <Label>{orderDetails?.totalAmount}</Label>
+            <Label>R${orderDetails?.totalAmount}</Label>
           </div>
 
           <div className="flex mt-2 items-center justify-between">
@@ -59,7 +59,7 @@ function ShoppingOrderDetailsView({ orderDetails }) {
         <div className="grid gap-4">
           <div className="grid gap-2">
             <div className="font-medium">Detalhes do pedido</div>
-            <ul className="grip gap-3">
+            <ul className="grid gap-3">
               {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
                 ? orderDetails?.cartItems.map((item) => (
                     <li
@@ -68,7 +68,7 @@ function ShoppingOrderDetailsView({ orderDetails }) {
                     >
                       <span>Titulo: {item.title}</span>
                       <span>Quantidade: {item.quantity}</span>
-                      <span>Preço: ${item.price}</span>
+                      <span>Preço: R${item.price}</span>
                     </li>
                   ))
                 : null}
