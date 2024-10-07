@@ -16,7 +16,7 @@ import {
   getAllOrdersByUserId,
   getOrderDetails,
   resetOrderDetails,
-} from "@/store/shop/order-slice";
+} from "@/store/shop-slice/order-slice";
 import { Badge } from "../ui/badge";
 
 function ShoppingOrders() {
@@ -60,7 +60,7 @@ function ShoppingOrders() {
           <TableBody>
             {orderList && orderList.length > 0
               ? orderList.map((orderItem) => (
-                  <TableRow>
+                  <TableRow key={orderItem?._id}>
                     <TableCell>{orderItem?._id}</TableCell>
                     <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
                     <TableCell>
