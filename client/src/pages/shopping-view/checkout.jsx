@@ -11,7 +11,7 @@ function ShoppingCheckout() {
   const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
   const { cartItems } = useSelector((state) => state.shopCart);
   const { toast } = useToast();
-  const user = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [isPaymentStart, setIsPaymentStart] = useState(false);
   const { approvalURL } = useSelector((state) => state.shopOrder);
