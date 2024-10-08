@@ -75,29 +75,16 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
         reviewMessage: reviewMsg,
         reviewValue: rating,
       })
-    )
-      .then((data) => {
-        console.log(data);
-        if (data && data.payload && data.payload.success) {
-          setRating(0);
-          setReviewMsg("");
-          dispatch(getReviews(productDetails?._id));
-          toast({ title: "Comentário adicionado com sucesso" });
-        } else {
-          toast({
-            title:
-              "Para enviar um comentário, é necessário comprar o produto primeiro",
-            variant: "destructive",
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Error ao adicionar comentário", error);
+    ).then((data) => {
+      if (data.payload.success) {
+        setRating(0);
+        setReviewMsg("");
+        dispatch(getReviews(productDetails?._id));
         toast({
-          title: "Error ao adicionar comentário",
-          variant: "destructive",
+          title: "Review added successfully!",
         });
-      });
+      }
+    });
   }
 
   const averageReview =
@@ -109,8 +96,6 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
   useEffect(() => {
     if (productDetails !== null) dispatch(getReviews(productDetails?._id));
   }, [productDetails]);
-
-  console.log(reviews, "reviews");
 
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
@@ -180,7 +165,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
             <div className="grid gap-6">
               {reviews && reviews.length > 0 ? (
                 reviews.map((reviewItem) => (
-                  <div className="flex gap-4" key={reviewItem?._id}>
+                  <div className="flex gap-4" key={reviewItem._id}>
                     <Avatar className="w-10 h-10 border">
                       <AvatarFallback>
                         {reviewItem?.userName[0].toUpperCase()}
