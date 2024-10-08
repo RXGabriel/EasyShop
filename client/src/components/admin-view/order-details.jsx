@@ -1,14 +1,15 @@
-import { Badge } from "lucide-react";
+import { Badge } from "../ui/badge";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getAllOrdersForAdmin,
   getOrderDetailsForAdmin,
   updateOrderStatus,
 } from "@/store/admin-slice/order-slice";
-import { toast } from "@/hooks/use-toast";
-import { DialogContent } from "@radix-ui/react-dialog";
+import { useToast } from "@/hooks/use-toast";
+import { DialogContent } from "../ui/dialog";
 import CommonForm from "../common/form";
 
 const initialFormData = {
@@ -16,9 +17,10 @@ const initialFormData = {
 };
 
 function AdminOrderDetailsView({ orderDetails }) {
-  const [formData, setFormData] = useState({ initialFormData });
+  const [formData, setFormData] = useState(initialFormData);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const { toast } = useToast();
 
   function handleUpdateStatus(event) {
     event.preventDefault();
@@ -29,7 +31,7 @@ function AdminOrderDetailsView({ orderDetails }) {
     ).then((data) => {
       if (data?.payload?.success) {
         dispatch(getOrderDetailsForAdmin(orderDetails?._id));
-        dispatch(getOrderDetailsForAdmin());
+        dispatch(getAllOrdersForAdmin());
         setFormData(initialFormData);
 
         toast({ title: data?.payload?.message });
@@ -53,7 +55,7 @@ function AdminOrderDetailsView({ orderDetails }) {
 
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Preço do Pedido</p>
-            <Label>{orderDetails?.totalAmount}</Label>
+            <Label>R${orderDetails?.totalAmount}</Label>
           </div>
 
           <div className="flex mt-2 items-center justify-between">
@@ -90,15 +92,15 @@ function AdminOrderDetailsView({ orderDetails }) {
           <div className="grid gap-2">
             <div className="font-medium">Detalhes do Pedido</div>
             <ul className="grid gap-3">
-              {orderDetails?.cardItems && orderDetails?.cardItems.length > 0
-                ? orderDetails?.cardItems.map((item, index) => (
+              {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
+                ? orderDetails?.cartItems.map((item) => (
                     <li
-                      key={index}
+                      key={item._id}
                       className="flex items-center justify-between"
                     >
                       <span>Título: {item.title}</span>
                       <span>Quantidade: {item.quantity}</span>
-                      <span>Preço: {item.price}</span>
+                      <span>Preço: R${item.price}</span>
                     </li>
                   ))
                 : null}
