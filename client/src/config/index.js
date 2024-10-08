@@ -58,9 +58,9 @@ export const addProductFormElements = [
     name: "category",
     componentType: "select",
     options: [
-      { id: "men", label: "Homens" },
-      { id: "women", label: "Mulheres" },
-      { id: "kids", label: "Crianças" },
+      { id: "men", label: "Homem" },
+      { id: "women", label: "Mulher" },
+      { id: "kids", label: "Kids" },
       { id: "accessories", label: "Acessórios" },
       { id: "footwear", label: "Calçados" },
     ],
@@ -114,17 +114,17 @@ export const shoppingViewHeaderMenuItems = [
   },
   {
     id: "men",
-    label: "Homens",
+    label: "Homem",
     path: "/shop/listing",
   },
   {
     id: "women",
-    label: "Mulheres",
+    label: "Mulher",
     path: "/shop/listing",
   },
   {
     id: "kids",
-    label: "Crianças",
+    label: "Kids",
     path: "/shop/listing",
   },
   {
@@ -145,9 +145,9 @@ export const shoppingViewHeaderMenuItems = [
 ];
 
 export const categoryOptionsMap = {
-  men: "Homens",
-  women: "Mulheres",
-  kids: "Crianças",
+  men: "Homem",
+  women: "Mulher",
+  kids: "Kids",
   accessories: "Acessórios",
   footwear: "Calçados",
 };
@@ -163,9 +163,9 @@ export const brandOptionsMap = {
 
 export const filterOptions = {
   category: [
-    { id: "men", label: "Homens" },
-    { id: "women", label: "Mulheres" },
-    { id: "kids", label: "Crianças" },
+    { id: "men", label: "Homem" },
+    { id: "women", label: "Mulher" },
+    { id: "kids", label: "Kids" },
     { id: "accessories", label: "Acessórios" },
     { id: "footwear", label: "Calçados" },
   ],
