@@ -1,7 +1,7 @@
 import ProductImageUpload from "@/components/admin-view/image-upload";
 import { Button } from "@/components/ui/button";
 import { addFeatureImage, getFeatureImages } from "@/store/common-slice";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 function AdminDashboard() {
@@ -21,7 +21,7 @@ function AdminDashboard() {
     });
   }
 
-  useState(() => {
+  useEffect(() => {
     dispatch(getFeatureImages());
   }, [dispatch]);
 
@@ -44,7 +44,7 @@ function AdminDashboard() {
       <div className="flex flex-col gap-4 mt-5">
         {featureImageList && featureImageList.length > 0
           ? featureImageList.map((featureImgItem, index) => (
-              <div key={index} className="relative">
+              <div key={featureImgItem.id || index} className="relative">
                 <img
                   src={featureImgItem.image}
                   className="w-full h-[300px] object-cover rounded-t-lg"
