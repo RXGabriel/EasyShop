@@ -63,7 +63,7 @@ function ShoppingOrderDetailsView({ orderDetails }) {
               {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
                 ? orderDetails?.cartItems.map((item) => (
                     <li
-                      key={item.id}
+                      key={item._id}
                       className="flex items-center justify-between"
                     >
                       <span>Titulo: {item.title}</span>
