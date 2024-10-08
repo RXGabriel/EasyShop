@@ -2,6 +2,7 @@ import { filterOptions } from "@/config";
 import { Fragment } from "react";
 import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
+import { Separator } from "../ui/separator";
 
 function ProductFilter({ filters, handleFilter }) {
   return (
@@ -18,7 +19,7 @@ function ProductFilter({ filters, handleFilter }) {
               <div className="grid gap-2 mt-2">
                 {filterOptions[keyItem].map((option) => (
                   <Label
-                    className="flex font-medium items-center gap-2 "
+                    className="flex font-medium items-center gap-2"
                     key={option.id}
                   >
                     <Checkbox
@@ -28,13 +29,14 @@ function ProductFilter({ filters, handleFilter }) {
                         filters[keyItem] &&
                         filters[keyItem].indexOf(option.id) > -1
                       }
-                      onChange={() => handleFilter(keyItem, option.id)}
+                      onCheckedChange={() => handleFilter(keyItem, option.id)}
                     />
                     {option.label}
                   </Label>
                 ))}
               </div>
             </div>
+            <Separator />
           </Fragment>
         ))}
       </div>
