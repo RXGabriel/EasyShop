@@ -21,7 +21,7 @@ const addAddress = async (req, res) => {
     });
     await createNewAddress.save();
 
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       data: createNewAddress,
     });
@@ -40,7 +40,7 @@ const editAddress = async (req, res) => {
     const formData = req.body;
 
     if (!userId || !addressId) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "Usuário e endereço é necessário",
       });
@@ -105,7 +105,7 @@ const deleteAddress = async (req, res) => {
       });
     }
 
-    const address = await Address.finOneAndDelete({ _id: addressId, userId });
+    const address = await Address.findOneAndDelete({ _id: addressId, userId });
     if (!address) {
       return res.status(404).json({
         success: false,

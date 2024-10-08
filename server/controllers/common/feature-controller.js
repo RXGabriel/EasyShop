@@ -6,7 +6,7 @@ const addFeatureImage = async (req, res) => {
     const featureImages = new Feature({ image });
     await featureImages.save();
 
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       data: featureImages,
     });
