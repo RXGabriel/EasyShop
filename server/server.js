@@ -13,6 +13,7 @@ const shopSearchRouter = require("./routes/shop/search-routes");
 const shopAddressRouter = require("./routes/shop/address-routes");
 const shopOrderRouter = require("./routes/shop/order-routes");
 
+require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -28,7 +29,7 @@ connectDB()
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_BASE_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: [
       "Content-Type",
